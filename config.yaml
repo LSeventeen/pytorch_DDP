@@ -1,0 +1,91 @@
+CUDA_VISIBLE_DEVICES: 0,1,2,3
+
+data_process:
+  se_size: 3
+  remove_size: 200
+
+path: /home/lwt/data_pro/retina
+
+data_set:
+  name: DRIVE
+  patch_size: 8
+  stride: 6
+  split: 0.9
+
+data_loader:
+  batch_size: 64
+
+
+model:
+  type: UNet_Oetd
+  args:
+    dropout: 0.2
+#    {}
+#    config:
+#      pretrained_layers: [ '*' ]
+#      stem_inplanes: 64
+#      final_conv_kernel: 1
+#      with_head: True
+#      stage1:
+#        num_modules: 1
+#        num_branches: 1
+#        num_blocks: [ 4 ]
+#        num_channels: [ 32 ]
+#        block: BOTTLENECK
+#        fuse_method: SUM
+#      stage2:
+#        num_modules: 1
+#        num_branches: 2
+#        num_blocks: [ 4,4 ]
+#        num_channels: [ 32,64 ]
+#        block: BASIC
+#        fuse_method: SUM
+#      stage3:
+#        num_modules: 1
+#        num_branches: 3
+#        num_blocks: [ 4,4 ,4 ]
+#        num_channels: [ 32,64 ,128 ]
+#        block: BASIC
+#        fuse_method: SUM
+#      stage4:
+#        num_modules: 1
+#        num_branches: 4
+#        num_blocks: [ 4,4 ,4,4 ]
+#        num_channels: [ 32,64,128,256 ]
+#        block: BASIC
+#        fuse_method: SUM
+
+loss:
+  type: BCELoss_3
+  gt_num: 3
+  args:
+#    D_weight: 0.5
+    weight: 0.5
+#    { }
+
+optimizer:
+  type: Adam
+  args:
+    lr: 1e-3
+    weight_decay: 1e-5
+
+lr_scheduler:
+  type: StepLR
+  args:
+    step_size: 10
+    gamma: 0.1
+
+
+
+trainer:
+  epochs: 40
+  save_dir: saved/
+  monitor": off
+  early_stop: 10
+  val_per_epochs: 1
+  save_period: 1
+  tensorboard: true
+  log_dir: saved/runs
+  log_per_iter: 50
+
+
